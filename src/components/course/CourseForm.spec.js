@@ -3,9 +3,9 @@ import React from 'react';
 import {mount, shallow} from 'enzyme';
 import CourseForm from './CourseForm';
 
-function setup(loading) {
+function setup(saving) {
   const props = {
-    course: {}, loading, errors: {},
+    course: {}, saving, errors: {},
     onSave: () => {},
     onChange: () => {}
   };

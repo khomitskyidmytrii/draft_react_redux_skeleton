@@ -3,6 +3,7 @@ import {connect, dispatch} from 'react-redux';
 import  {bindActionCreators} from 'redux';
 import  * as courseActions from '../../actions/courseActions';
 import CourseForm from './CourseForm';
+import toastr from 'toastr';
 
 export class ManageCoursePage extends React.Component {
   constructor(props, context) {
@@ -32,12 +33,35 @@ export class ManageCoursePage extends React.Component {
 
   saveCourse(event) {
     event.preventDefault();
+    if (!this.courseFormIsValid()) {
+      return;
+    }
+    this.setState({saving: true});
     this.props.actions.saveCourse(this.state.course)
-      .then(() => this.redirect());
+      .then(() => {
+        this.redirect();
+        toastr.success('Course Saved');
+      })
+      .catch(error => {
+        toastr.error(error);
+        this.setState({saving: false});
+      });
   }
 
   redirect() {
+    this.setState({saving: false});
     this.context.router.push('/courses');
+  }
+
+  courseFormIsValid() {
+    let formIsValid = true;
+    let errors = {};
+    if (this.state.course.title.length < 5) {
+      errors.title = 'Title must be at least 5 characters.';
+      formIsValid = false;
+    }
+    this.setState({errors: errors});
+    return formIsValid;
   }
 
   render() {
@@ -47,7 +71,8 @@ export class ManageCoursePage extends React.Component {
         onChange={this.updateCourseState}
         onSave={this.saveCourse}
         course={this.state.course}
-        errors={this.state.errors}/>
+        errors={this.state.errors}
+        saving={this.state.saving}/>
     );
   }
 }
@@ -55,7 +80,8 @@ export class ManageCoursePage extends React.Component {
 ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  saving: PropTypes.bool.isRequired
 };
 
 ManageCoursePage.contextTypes = {

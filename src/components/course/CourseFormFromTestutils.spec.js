@@ -3,9 +3,9 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import CourseForm from './CourseForm';
 
-function setup(loading) {
+function setup(saving) {
   let props = {
-    course: {},loading:loading, errors: {},
+    course: {},saving, errors: {},
     onSave: () => {},
     onChange: () => {}
   };
