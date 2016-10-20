@@ -4,7 +4,7 @@ import  {bindActionCreators} from 'redux';
 import  * as courseActions from '../../actions/courseActions';
 import CourseForm from './CourseForm';
 import toastr from 'toastr';
-
+import {authorsFormattedForSelect} from '../../selectors/selectors';
 export class ManageCoursePage extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -81,7 +81,7 @@ ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
-  saving: PropTypes.bool.isRequired
+  // saving: PropTypes.bool.isRequired
 };
 
 ManageCoursePage.contextTypes = {
@@ -103,17 +103,11 @@ function mapStateToProps(state, ownProps) {
   if (courseId && state.courses.length > 0) {
     course = getCourseById(state.courses, courseId);
   }
-  const authorsFormattedForSelect = state.authors
-    .map(author => {
-      return {
-        value: author.id,
-        text: `${author.firstName} ${author.lastName}`
-      };
-    });
+  //
 
   return {
     course: course,
-    authors: authorsFormattedForSelect
+    authors: authorsFormattedForSelect(state.authors)
   };
 }
 

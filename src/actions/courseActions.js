@@ -15,7 +15,7 @@ export function loadCourses() {
         dispatch(loadCoursesSuccess(courses));
       })
       .catch(error => {
-        dispatch(ajaxCallError(err));
+        dispatch(ajaxCallError(error));
         throw(error);
       });
   };
